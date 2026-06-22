@@ -597,8 +597,6 @@ Look for Issues tagged **`good first issue`** — these are small, well-scoped t
 
 ## Credits
 
-- Original concept & macOS app: [farzaa/Maclicky](https://github.com/farzaa/Maclicky)
-- Windows port: Shashank Singh
 - Pointing engine: [Anthropic Computer Use API](https://docs.anthropic.com/en/docs/computer-use)
 - Local STT: [whisper.cpp](https://github.com/ggerganov/whisper.cpp) via [pywhispercpp](https://github.com/abdeladim-s/pywhispercpp) (same engine as [Handy](https://github.com/cjpais/Handy))
 - Free web search: DuckDuckGo HTML + [Tavily](https://tavily.com)
