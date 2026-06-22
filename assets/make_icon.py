@@ -61,6 +61,18 @@ def main():
     )
     print(f"Wrote {OUT} ({len(sizes)} sizes)")
 
+    # Also write .icns for macOS
+    out_icns = OUT.with_suffix(".icns")
+    icns_sizes = [16, 32, 64, 128, 256, 512]
+    icns_frames = [make_frame(s) for s in icns_sizes]
+    icns_frames[0].save(
+        out_icns,
+        format="ICNS",
+        sizes=[(s, s) for s in icns_sizes],
+        append_images=icns_frames[1:],
+    )
+    print(f"Wrote {out_icns} ({len(icns_sizes)} sizes)")
+
 
 if __name__ == "__main__":
     main()
