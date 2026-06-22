@@ -33,8 +33,7 @@ from config import cfg
 
 # Marker file: the wizard skips itself if this exists.
 def _flag_path() -> Path:
-    base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Maclicky"
+    d = Path.home() / "Maclicky"
     d.mkdir(parents=True, exist_ok=True)
     return d / "setup_complete.flag"
 

@@ -21,7 +21,7 @@ STATE_SPEAKING  = QColor(255, 140, 0)
 
 # ── Fonts ─────────────────────────────────────────────────────────────────────
 def font(size: int = 13, weight: QFont.Weight = QFont.Weight.Normal) -> QFont:
-    f = QFont("Segoe UI", size)
+    f = QFont("SF Pro", size)
     f.setWeight(weight)
     return f
 

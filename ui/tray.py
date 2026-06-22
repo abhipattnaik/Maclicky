@@ -28,7 +28,7 @@ def _make_tray_icon(color: QColor) -> QIcon:
 
 
 class TrayManager(QObject):
-    """Windows system tray icon and context menu."""
+    """macOS system tray icon and context menu."""
 
     on_show_panel         = pyqtSignal()
     on_hide_panel         = pyqtSignal()

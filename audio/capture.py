@@ -12,7 +12,7 @@ BLOCK_SIZE  = 1024
 class MicCapture:
     """
     Real-time microphone capture using sounddevice (PortAudio wrapper).
-    No C compilation required — ships prebuilt wheels on Windows.
+    Ships prebuilt wheels for macOS — no C compilation required.
     """
 
     def __init__(

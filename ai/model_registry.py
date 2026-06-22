@@ -51,8 +51,7 @@ _FALLBACKS: dict[str, list[dict]] = {
 
 
 def _data_dir() -> Path:
-    base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Maclicky"
+    d = Path.home() / "Maclicky"
     d.mkdir(parents=True, exist_ok=True)
     return d
 

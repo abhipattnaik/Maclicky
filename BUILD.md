@@ -1,49 +1,36 @@
-# Building Maclicky.exe for Windows
+# Building Maclicky for macOS
 
-Two ways to package Maclicky for your friend's laptop:
+Two ways to package Maclicky for distribution:
 
 | Method | Output | Size | Install | Best for |
 |---|---|---|---|---|
-| **Portable folder** | `dist\Maclicky\` | ~400-600 MB | Copy the folder, double-click `Maclicky.exe` | Quick testing, USB stick |
-| **Setup installer** | `Setup-Maclicky.exe` | ~200-400 MB | Double-click, Next, Finish | Polished distribution |
+| **App Bundle** | `dist/Maclicky.app` | ~400-600 MB | Drag to Applications | Quick testing |
+| **DMG installer** | `dist/Maclicky.dmg` | ~200-400 MB | Double-click, drag to Apps | Polished distribution |
 
 ---
 
-## Quick build (portable folder)
+## Quick build
 
-```bat
-build.bat
+```bash
+chmod +x build.sh
+./build.sh
 ```
 
-That's it. After 2-5 minutes:
+After 2-5 minutes:
 ```
-dist\Maclicky\Maclicky.exe    ← hand this whole folder to your friend
+dist/Maclicky.app       ← drag to /Applications
+dist/Maclicky.dmg       ← share this with friends
+dist/Maclicky-macOS.zip ← compressed archive
 ```
 
 Your friend:
-1. Copies the `Maclicky` folder anywhere on their PC
-2. (Optional) creates `.env` next to `Maclicky.exe` with their API keys — see `.env.example`
-3. Double-clicks `Maclicky.exe`
-4. Tray icon appears, Maclicky is running
+1. Opens `Maclicky.dmg`
+2. Drags `Maclicky.app` to their Applications folder
+3. (Optional) creates `~/.env` in the app bundle or `~/Maclicky/.env` with API keys — see `.env.example`
+4. Double-clicks `Maclicky.app`
+5. Menu bar icon appears, Maclicky is running
 
 **No Python needed on their machine.** Everything is bundled.
-
----
-
-## Full installer (`Setup-Maclicky.exe`)
-
-1. Install [Inno Setup 6](https://jrsoftware.org/isdl.php) (free)
-2. Run:
-   ```bat
-   build.bat installer
-   ```
-3. Output: `dist\Setup-Maclicky.exe` — a single self-extracting installer
-
-Your friend runs `Setup-Maclicky.exe`:
-- Pick install location (default: `C:\Program Files\Maclicky`)
-- Choose: desktop shortcut? launch on Windows startup?
-- Next → Install → Finish
-- Uninstall works through Windows Settings like any other app
 
 ---
 
@@ -54,7 +41,7 @@ Your friend runs `Setup-Maclicky.exe`:
 | Python runtime | ✅ | Embedded — no install needed |
 | PyQt6 | ✅ | UI framework |
 | faster-whisper + ctranslate2 | ✅ | Local STT (free fallback) |
-| edge-tts | ✅ | Free Windows TTS (always available) |
+| edge-tts | ✅ | Free TTS (always available) |
 | anthropic / openai / google SDKs | ✅ | LLM clients |
 | Your `.env` | ❌ | **Must be added post-install** (security) |
 | Ollama server | ❌ | Friend installs separately if they want local AI |
@@ -63,21 +50,27 @@ Your friend runs `Setup-Maclicky.exe`:
 
 ## First-run checklist for your friend
 
-When they launch `Maclicky.exe` the first time:
+When they launch `Maclicky.app` the first time:
 
-1. **Windows SmartScreen warning** (blue popup)
-   - Click "More info" → "Run anyway"
-   - This is normal for unsigned .exe files. To fix permanently, code-sign with a certificate (~$100/year).
+1. **macOS Gatekeeper warning** ("can't be opened because it's from an unidentified developer")
+   - Right-click the app → "Open" → click "Open" in the dialog
+   - Or go to **System Settings → Privacy & Security** → click "Open Anyway"
+   - This is normal for unsigned apps. To fix permanently, code-sign with an Apple Developer certificate (~$99/year).
 
-2. **Microphone permission** (Windows pops up)
-   - Click "Yes" — needed for voice input
+2. **Microphone permission** (macOS prompts automatically)
+   - Click "OK" — needed for voice input
+   - If denied, re-enable in **System Settings → Privacy & Security → Microphone**
 
-3. **Tray icon** appears bottom-right
-   - Right-click it → see the menu
-   - If no tray icon, check that the process is running in Task Manager
+3. **Accessibility permission** (for global hotkey)
+   - macOS may prompt to allow keyboard monitoring
+   - Grant access in **System Settings → Privacy & Security → Accessibility**
 
-4. **Test it**:
-   - Hold `Cmd + Alt + Space`, say "what's on my screen"
+4. **Menu bar icon** appears in the top-right
+   - Click it → see the menu
+   - If no icon appears, check Activity Monitor for the Maclicky process
+
+5. **Test it**:
+   - Hold `Cmd + Opt + Space`, say "what's on my screen"
    - If silent → check `.env` has at least one API key, OR install Ollama locally
 
 ---
@@ -85,22 +78,19 @@ When they launch `Maclicky.exe` the first time:
 ## Troubleshooting the build
 
 **`pyinstaller: command not found`**
-```bat
+```bash
 pip install pyinstaller
 ```
 
 **`Failed to collect faster_whisper`**
-```bat
+```bash
 pip install --upgrade faster-whisper ctranslate2
 ```
-Then re-run `build.bat`.
+Then re-run `./build.sh`.
 
-**`ImportError: DLL load failed` at runtime on friend's PC**
-- Friend needs [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) (usually already installed on Windows 10/11)
-
-**Antivirus flags Maclicky.exe**
-- False positive — PyInstaller bundles are sometimes flagged because they self-extract
-- Add an exclusion for the install folder, or code-sign the binary
+**App crashes on launch**
+- Check Console.app for crash logs
+- Make sure you built with the same Python version in your `.venv`
 
 **Build is 600 MB — too large**
 - Most of that is `torch` (pulled in by `faster-whisper`)
@@ -109,22 +99,26 @@ Then re-run `build.bat`.
 
 **Build is slow (5+ min)**
 - Normal first time — PyInstaller analyses every import
-- Subsequent builds are faster if you don't `rmdir /s /q build`
+- Subsequent builds are faster if you don't `rm -rf build`
 
 ---
 
-## Signing the installer (optional)
+## Code-signing the app (optional)
 
-To avoid the Windows SmartScreen warning, you need an **Authenticode code-signing certificate**:
+To avoid the macOS Gatekeeper warning, you need an **Apple Developer certificate**:
 
-1. Buy one from Sectigo / DigiCert / SSL.com (~$80-400/year)
-2. After `build.bat`, sign both files:
-   ```bat
-   signtool sign /f mycert.pfx /p PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 dist\Maclicky\Maclicky.exe
-   signtool sign /f mycert.pfx /p PASSWORD /tr http://timestamp.digicert.com /td sha256 /fd sha256 dist\Setup-Maclicky.exe
+1. Enroll in the [Apple Developer Program](https://developer.apple.com/programs/) ($99/year)
+2. After `./build.sh`, sign the app:
+   ```bash
+   codesign --deep --force --sign "Developer ID Application: Your Name (TEAM_ID)" dist/Maclicky.app
+   ```
+3. Optionally notarize for full Gatekeeper bypass:
+   ```bash
+   xcrun notarytool submit dist/Maclicky.dmg --apple-id you@email.com --team-id TEAM_ID --password @keychain:AC_PASSWORD --wait
+   xcrun stapler staple dist/Maclicky.dmg
    ```
 
-For testing with friends this is overkill — just tell them to click "Run anyway".
+For testing with friends this is overkill — just tell them to right-click → Open.
 
 ---
 
@@ -134,11 +128,7 @@ For testing with friends this is overkill — just tell them to click "Run anywa
 Maclicky/
 ├── build/              ← PyInstaller scratch (safe to delete)
 └── dist/
-    ├── Maclicky/         ← portable folder — give this to friends
-    │   ├── Maclicky.exe
-    │   ├── _internal/  ← bundled Python + libs (~500 MB)
-    │   ├── .env.example
-    │   ├── LICENSE
-    │   └── README.md
-    └── Setup-Maclicky.exe ← single-file installer (if you built with installer flag)
+    ├── Maclicky.app    ← macOS application bundle
+    ├── Maclicky.dmg    ← disk image installer — share with friends
+    └── Maclicky-macOS.zip ← ZIP archive for distribution
 ```

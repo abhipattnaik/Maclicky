@@ -184,18 +184,9 @@ def main():
 
     # Journal folder
     def _open_journal():
-        import os, subprocess, sys
-        base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-        path = os.path.join(base, "Maclicky")
-        if sys.platform == "darwin":
-            subprocess.Popen(["open", path])
-        elif sys.platform == "win32":
-            try:
-                os.startfile(path)
-            except Exception:
-                subprocess.Popen(["explorer", path])
-        else: # linux
-            subprocess.Popen(["xdg-open", path])
+        import subprocess
+        path = os.path.expanduser("~/Maclicky")
+        subprocess.Popen(["open", path])
     tray.on_journal_open.connect(_open_journal)
 
     # Attach document (drag-drop alternative — file picker)
@@ -272,8 +263,7 @@ def main():
     def _save_diagnostics():
         import datetime, json, platform, traceback
         from ai import ollama_bootstrap as ob
-        base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-        out = Path(base) / "Maclicky" / f"diagnostics-{datetime.datetime.now():%Y%m%d-%H%M%S}.txt"
+        out = Path.home() / "Maclicky" / f"diagnostics-{datetime.datetime.now():%Y%m%d-%H%M%S}.txt"
         try:
             providers_d = cfg.describe()
         except Exception:
@@ -305,13 +295,12 @@ def main():
         except Exception:
             report.append(traceback.format_exc())
         try:
+            out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text("\n".join(report), encoding="utf-8")
             tray.show_notification("Diagnostics saved", str(out))
             try:
-                if sys.platform == "darwin":
-                    subprocess.Popen(["open", str(out)])
-                else:
-                    os.startfile(str(out))
+                import subprocess
+                subprocess.Popen(["open", str(out)])
             except Exception:
                 pass
         except Exception as e:

@@ -340,7 +340,7 @@ class CompanionManager(QObject):
             self._listener.stop()
         except Exception:
             pass
-        time.sleep(1.0)   # give Windows audio stack time to reinit
+        time.sleep(1.0)   # give macOS audio stack time to reinit
         try:
             self._listener.start()
         except Exception as e:

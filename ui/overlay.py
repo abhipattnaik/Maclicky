@@ -432,7 +432,7 @@ class CursorOverlay(QWidget):
 
     def _paint_text(self, p, x, y, text, col):
         x -= self.x(); y -= self.y()
-        font = QFont("Segoe UI", 11, QFont.Weight.Bold)
+        font = QFont("SF Pro", 11, QFont.Weight.Bold)
         p.setFont(font)
         p.setPen(QPen(col, 1))
         p.drawText(QPointF(x, y), text)
@@ -551,7 +551,7 @@ class CursorOverlay(QWidget):
 
     def _draw_bubble(self, p, cx, cy, label: str):
         """Speech bubble next to the buddy, matches Swift pill style."""
-        font = QFont("Segoe UI", 9, QFont.Weight.Medium)
+        font = QFont("SF Pro", 9, QFont.Weight.Medium)
         p.setFont(font)
         fm = p.fontMetrics()
 

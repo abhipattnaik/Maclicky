@@ -193,13 +193,13 @@ import asyncio
 SKILL = {
     "name": "open_calculator",
     "trigger": r"(open|launch|start) calculator",
-    "description": "Opens Windows Calculator",
+    "description": "Opens macOS Calculator",
     "handler": open_calc,
 }
 
 async def open_calc(transcript: str, manager) -> str:
     import subprocess
-    subprocess.Popen("calc.exe")
+    subprocess.Popen(["open", "-a", "Calculator"])
     return "Opening calculator for you."
 ```
 
@@ -210,7 +210,7 @@ Place skill files in `~/.Maclicky/skills/` — Maclicky auto-loads on startup.
 ## Installation
 
 ### Prerequisites
-- Windows 10 / 11 (64-bit)
+- macOS 13+ (Ventura or later)
 - Python 3.11, 3.12, or 3.14
 - A working microphone
 
@@ -249,7 +249,7 @@ OLLAMA_HOST=http://localhost:11434
 OLLAMA_MODEL=llama3.2-vision
 
 # ── Customise ─────────────────────────────────────────────
-Maclicky_HOTKEY=cmd+alt+space
+MACLICKY_HOTKEY=cmd+alt+space
 WHISPERCPP_MODEL=base.en
 ```
 
@@ -259,7 +259,7 @@ Tray → Model → Sign in to GitHub Copilot…
 → visit github.com/login/device → enter code shown in terminal
 ```
 
-Token cached at `~/Maclicky\github_token.json`. Default model = `gpt-4o-mini` (free tier).
+Token cached at `~/Maclicky/github_token.json`. Default model = `gpt-4o-mini` (free tier).
 
 ### 5. Run
 ```bash
@@ -301,26 +301,19 @@ Maclicky uses **two Ollama model slots**: a vision model for screen-aware questi
 
 ---
 
-## Distribution — Single .exe Installer
+## Distribution — macOS App Bundle
 
 For sharing with friends without Python:
 
 ```bash
-# 1. Generate icon
-python assets/make_icon.py
-
-# 2. Build
-pip install pyinstaller
-pyinstaller Maclicky.spec --clean --noconfirm
-
-# 3. Distribute
-# → dist/Maclicky/  (entire folder)
-# → or build Setup.exe with Inno Setup using installer.iss
+# Build (generates .app, .dmg, .zip)
+chmod +x build.sh
+./build.sh
 ```
 
-The `dist/Maclicky/Maclicky.exe` runs on any Windows machine without Python. Include a `.env` file next to the exe with your API keys, or set them as system environment variables.
+The `dist/Maclicky.app` runs on any Mac without Python. Create a `~/Maclicky/.env` file with API keys, or set them as system environment variables.
 
-See [BUILD.md](BUILD.md) for full packaging instructions including Inno Setup installer.
+See [BUILD.md](BUILD.md) for full packaging instructions including DMG installer and code-signing.
 
 ---
 
@@ -480,9 +473,8 @@ Maclicky/
 │
 ├── .env                         # your API keys (not committed)
 ├── requirements.txt             # all Python dependencies
-├── Maclicky.spec                  # PyInstaller build spec
-├── installer.iss                # Inno Setup installer script
-├── build.bat                    # one-click build script
+├── maclicky.spec                # PyInstaller build spec
+├── build.sh                     # one-click macOS build script
 ├── BUILD.md                     # full build + packaging guide
 └── LICENSE                      # MIT
 ```
@@ -504,9 +496,9 @@ Maclicky/
 | `OLLAMA_MODEL` | `llama3.2-vision` | Legacy single-model fallback |
 | `OLLAMA_VISION_MODEL` | *(empty)* | Ollama model for screen-aware tasks (pointing, describe screen) |
 | `OLLAMA_TEXT_MODEL` | *(empty)* | Ollama model for Code Mode + journal Q&A |
-| `Maclicky_HOTKEY` | `cmd+alt+space` | Global push-to-talk combo |
-| `Maclicky_STT` | *(auto)* | Force STT: `deepgram`/`openai`/`whisper_cpp`/`faster_whisper` |
-| `Maclicky_ACTIVE_LLM` | *(auto)* | Force LLM: `Grok`/`openai`/`copilot`/`gemini`/`ollama` |
+| `MACLICKY_HOTKEY` | `cmd+alt+space` | Global push-to-talk combo |
+| `MACLICKY_STT` | *(auto)* | Force STT: `deepgram`/`openai`/`whisper_cpp`/`faster_whisper` |
+| `MACLICKY_ACTIVE_LLM` | *(auto)* | Force LLM: `claude`/`openai`/`copilot`/`gemini`/`ollama` |
 | `WHISPER_MODEL` | `base` | Faster-Whisper model (`tiny`/`base`/`small`/`medium`) |
 | `WHISPERCPP_MODEL` | `base.en` | whisper.cpp model size |
 
@@ -515,7 +507,7 @@ Maclicky/
 ## Troubleshooting
 
 **Maclicky doesn't hear me**
-→ Check default microphone in Windows Sound settings
+→ Check default microphone in macOS **System Settings → Sound → Input**
 → Upgrade to Deepgram for better accuracy in noisy rooms
 
 **"Thinking…" forever with Ollama**

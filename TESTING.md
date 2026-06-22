@@ -84,7 +84,7 @@ python main.py
 ## 6. Multi-Step Lesson
 
 1. Open a video in VLC or any video player
-2. Ask *"how do I take a screenshot in Windows?"*
+2. Ask *"how do I take a screenshot on macOS?"*
 
 ✅ Maclicky gives Step 1, ends with *"say 'next' when ready"*  
 3. Say **"next"**  

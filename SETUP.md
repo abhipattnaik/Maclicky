@@ -18,12 +18,11 @@ pip install -r requirements-student.txt
 pip install -r requirements.txt
 ```
 
-> **PyAudio on Windows** may need: `pip install pipwin && pipwin install pyaudio`
 
 ## Configure
 
 ```bash
-copy .env.example .env
+cp .env.example .env
 # Edit .env and add any API keys you have
 # Everything is optional — Ollama is the free fallback
 ```
@@ -51,4 +50,4 @@ The Maclicky icon appears in your system tray.
 
 - [ ] Phase 4: Cursor overlay pointing animation (UI complete, coordinate mapping pending)
 - [ ] Phase 5: Web search grounding (Tavily/DuckDuckGo wired in, needs testing)
-- [ ] Phase 6: PyInstaller .exe packaging + installer
+- [ ] Phase 6: macOS .app + .dmg packaging (see BUILD.md)

@@ -6,7 +6,6 @@ orchestrator stays readable.
 
 from __future__ import annotations
 
-import ctypes
 import re
 import subprocess
 import sys
@@ -15,27 +14,14 @@ import sys
 # ── Active-window title (for per-app context memory) ─────────────────────────
 
 def active_window_title() -> str:
-    if sys.platform == "darwin":
-        try:
-            cmd = ['osascript', '-e', 'tell application "System Events" to get name of first process whose frontmost is true']
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=1.0)
-            if result.returncode == 0:
-                return result.stdout.strip()
-        except Exception:
-            pass
-        return ""
-    else:
-        try:
-            u = ctypes.windll.user32
-            hwnd = u.GetForegroundWindow()
-            if not hwnd:
-                return ""
-            n = u.GetWindowTextLengthW(hwnd)
-            buf = ctypes.create_unicode_buffer(n + 1)
-            u.GetWindowTextW(hwnd, buf, n + 1)
-            return buf.value or ""
-        except Exception:
-            return ""
+    try:
+        cmd = ['osascript', '-e', 'tell application "System Events" to get name of first process whose frontmost is true']
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=1.0)
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except Exception:
+        pass
+    return ""
 
 
 def app_key(title: str) -> str:

@@ -103,7 +103,7 @@ class GlobalHotkeyMonitor:
             "ctrl": keyboard.is_pressed("ctrl"),
             "alt": keyboard.is_pressed("alt"),
             "shift": keyboard.is_pressed("shift"),
-            "win": keyboard.is_pressed("windows"),
+            "cmd": keyboard.is_pressed("command"),
         }
         return all(mod_map.get(m, False) for m in mods)
 

@@ -16,7 +16,6 @@ ScreenShot now carries every number needed to convert between them.
 """
 
 import base64
-import ctypes
 import io
 from dataclasses import dataclass
 from typing import List
@@ -62,17 +61,6 @@ def _query_dpi_scale() -> float:
             screen = app.primaryScreen()
             if screen:
                 return float(screen.devicePixelRatio())
-    except Exception:
-        pass
-
-    try:
-        # GetDpiForSystem returns DPI as integer (96 = 100%, 144 = 150%)
-        if hasattr(ctypes, "windll"):
-            u = ctypes.windll.user32
-            u.SetProcessDPIAware()
-            gdfs = getattr(u, "GetDpiForSystem", None)
-            if gdfs:
-                return max(1.0, gdfs() / 96.0)
     except Exception:
         pass
     return 1.0

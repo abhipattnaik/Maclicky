@@ -30,11 +30,7 @@ import httpx
 from config import cfg
 
 
-OLLAMA_DOWNLOAD_URL = (
-    "https://ollama.com/download/Ollama-darwin.zip"
-    if sys.platform == "darwin"
-    else "https://ollama.com/download/OllamaSetup.exe"
-)
+OLLAMA_DOWNLOAD_URL = "https://ollama.com/download/Ollama-darwin.zip"
 
 # Default models we recommend for the free tier. Kept small so the
 # download finishes in a reasonable time on a typical home connection.
@@ -144,11 +140,9 @@ def pull_model(
 # ─── Installer download / run ─────────────────────────────────────────────────
 
 def _default_installer_path() -> Path:
-    base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Maclicky" / "downloads"
+    d = Path.home() / "Maclicky" / "downloads"
     d.mkdir(parents=True, exist_ok=True)
-    filename = "Ollama-darwin.zip" if sys.platform == "darwin" else "OllamaSetup.exe"
-    return d / filename
+    return d / "Ollama-darwin.zip"
 
 
 def download_ollama_installer(

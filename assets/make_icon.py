@@ -2,9 +2,9 @@
 Generate a Maclicky-blue icon.ico for the PyInstaller build.
 
 Produces assets/icon.ico with multiple sizes (16, 32, 48, 64, 128, 256) —
-Windows picks the right size for taskbar, file explorer, and installer.
+macOS picks the right size for Dock, Finder, and the .app bundle.
 
-Run once before building:  python assets\make_icon.py
+Run once before building:  python assets/make_icon.py
 """
 
 from pathlib import Path
