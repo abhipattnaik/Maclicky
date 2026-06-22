@@ -7,6 +7,16 @@ import os
 import sys
 from pathlib import Path
 
+# macOS compatibility patch for pynput under Python 3.14+
+if sys.platform == "darwin":
+    try:
+        import ApplicationServices
+        import HIServices
+        if not hasattr(HIServices, "AXIsProcessTrusted") and hasattr(ApplicationServices, "AXIsProcessTrusted"):
+            HIServices.AXIsProcessTrusted = ApplicationServices.AXIsProcessTrusted
+    except Exception:
+        pass
+
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 

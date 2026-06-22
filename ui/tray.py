@@ -1,3 +1,4 @@
+import sys
 from PyQt6.QtWidgets import QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QColor, QBrush
 from PyQt6.QtCore import Qt, QSize, pyqtSignal, QObject
@@ -96,12 +97,13 @@ class TrayManager(QObject):
 
     def _build_menu(self):
         menu = QMenu()
-        menu.setStyleSheet(
-            "QMenu { background: rgb(22,22,28); border: 1px solid rgb(55,55,70);"
-            "border-radius: 8px; color: rgb(220,220,230); font-size: 13px; }"
-            "QMenu::item:selected { background: rgb(0,90,200); border-radius: 4px; }"
-            "QMenu::separator { height: 1px; background: rgb(55,55,70); margin: 4px 8px; }"
-        )
+        if sys.platform != "darwin":
+            menu.setStyleSheet(
+                "QMenu { background: rgb(22,22,28); border: 1px solid rgb(55,55,70);"
+                "border-radius: 8px; color: rgb(220,220,230); font-size: 13px; }"
+                "QMenu::item:selected { background: rgb(0,90,200); border-radius: 4px; }"
+                "QMenu::separator { height: 1px; background: rgb(55,55,70); margin: 4px 8px; }"
+            )
 
         providers = cfg.describe()
         info = menu.addAction(
