@@ -1,4 +1,4 @@
-# Clicky — Feature Testing Guide
+# Maclicky — Feature Testing Guide
 
 How to verify every feature works. Go top-to-bottom; each section is independent.
 
@@ -11,20 +11,20 @@ python main.py
 ```
 
 ✅ Blue dot appears in system tray (bottom-right of taskbar)  
-✅ `Clicky is running` toast notification appears  
+✅ `Maclicky is running` toast notification appears  
 ✅ Blue triangle overlay floats next to your cursor  
 
 ---
 
 ## 1. Push-to-Talk (PTT)
 
-1. Hold **Ctrl + Alt + Space**
+1. Hold **Cmd + Alt + Space**
 2. Say *"What page am I on?"*
 3. Release the keys
 
 ✅ Overlay waveform animates while you speak  
 ✅ Overlay switches to "thinking" spinner  
-✅ Clicky describes the current page/app  
+✅ Maclicky describes the current page/app  
 ✅ TTS speaks the answer  
 
 ---
@@ -32,16 +32,16 @@ python main.py
 ## 2. Wake Word
 
 1. Do NOT press any hotkey
-2. Say **"Clicky"** then immediately *"what time is it?"*
+2. Say **"Maclicky"** then immediately *"what time is it?"*
 
-✅ Blue buddy reacts after you say "Clicky"  
-✅ Clicky answers the question  
+✅ Blue buddy reacts after you say "Maclicky"  
+✅ Maclicky answers the question  
 
 ---
 
 ## 3. Esc to Stop
 
-1. Hold **Ctrl + Alt + Space**, ask *"explain the entire history of the internet"* (long answer)
+1. Hold **Cmd + Alt + Space**, ask *"explain the entire history of the internet"* (long answer)
 2. Wait 2 seconds into the response
 3. Press **Esc**
 
@@ -55,12 +55,12 @@ python main.py
 > Requires `ANTHROPIC_API_KEY` in `.env`
 
 1. Open any browser to google.com
-2. Hold **Ctrl + Alt + Space**, say *"where is the search bar?"*
+2. Hold **Cmd + Alt + Space**, say *"where is the search bar?"*
 
 ✅ Blue buddy flies via bezier arc to the search bar  
 ✅ Pulsing highlight ring appears around it  
 ✅ Speech bubble shows "search bar"  
-✅ Clicky says *"That's the Google search bar"* (or similar)  
+✅ Maclicky says *"That's the Google search bar"* (or similar)  
 ✅ Buddy returns to cursor after TTS ends  
 
 **Also test:**
@@ -86,7 +86,7 @@ python main.py
 1. Open a video in VLC or any video player
 2. Ask *"how do I take a screenshot in Windows?"*
 
-✅ Clicky gives Step 1, ends with *"say 'next' when ready"*  
+✅ Maclicky gives Step 1, ends with *"say 'next' when ready"*  
 3. Say **"next"**  
 ✅ Step 2 delivered without a new LLM call  
 4. Continue until done  
@@ -99,7 +99,7 @@ python main.py
 2. Wait for it to finish speaking
 3. Say **"repeat"** or **"say that again"**
 
-✅ Clicky replays the last TTS without querying the LLM again  
+✅ Maclicky replays the last TTS without querying the LLM again  
 
 ---
 
@@ -120,7 +120,7 @@ python main.py
 ✅ Toast: *"Switched to openai"*  
 ✅ Panel badge changes to GPT-4o  
 ✅ Model dropdown repopulates with OpenAI models  
-✅ Clicky answers using the new provider  
+✅ Maclicky answers using the new provider  
 
 3. Switch back to Claude  
 
@@ -163,11 +163,11 @@ python main.py
 
 1. Show Panel (tray → Show Panel)
 2. Find any PDF or DOCX file in Explorer
-3. Drag it onto the Clicky panel
+3. Drag it onto the Maclicky panel
 
 ✅ Toast: *"Document Attached"*  
 4. Ask *"summarise what's in the document I just gave you"*  
-✅ Clicky summarises the file contents  
+✅ Maclicky summarises the file contents  
 
 **Alternative:** Tray → Journal → Attach document… → pick a file  
 
@@ -175,17 +175,17 @@ python main.py
 
 ## 13. Knowledge Journal
 
-1. Have a 3–4 question conversation with Clicky
+1. Have a 3–4 question conversation with Maclicky
 2. Say *"what did we cover today?"*
 
-✅ Clicky summarises today's Q&A from the local journal  
+✅ Maclicky summarises today's Q&A from the local journal  
 
 3. Say *"what did we cover this week?"*  
 ✅ Weekly digest  
 
 **Check the database:**
 ```
-%LOCALAPPDATA%\Clicky\journal.db
+~/Maclicky\journal.db
 ```
 
 ---
@@ -194,10 +194,10 @@ python main.py
 
 1. Open a website or document with visible content
 2. Tray → **Tutor Mode → Quiz Mode: OFF** → turns ON
-3. Hold **Ctrl + Alt + Space**, say *"quiz me"*
+3. Hold **Cmd + Alt + Space**, say *"quiz me"*
 
-✅ Clicky asks YOU a question about what's on screen  
-✅ Answer it — Clicky evaluates in one sentence  
+✅ Maclicky asks YOU a question about what's on screen  
+✅ Answer it — Maclicky evaluates in one sentence  
 ✅ Next question follows automatically  
 
 4. Turn Quiz Mode OFF  
@@ -220,7 +220,7 @@ python main.py
 1. Tray → **Tutor Mode → Multilingual: ON**
 2. Ask a question in Hindi: *"मेरी स्क्रीन पर क्या है?"*
 
-✅ Clicky detects Hindi  
+✅ Maclicky detects Hindi  
 ✅ Responds in Hindi  
 ✅ TTS voice switches to a Hindi voice  
 
@@ -236,14 +236,14 @@ python main.py
 1. Open a page with small/dense text (e.g., a legal document, footnotes)
 2. Ask *"read the fine print"* or *"what does the small text say?"*
 
-✅ Clicky runs OCR on the screenshot  
+✅ Maclicky runs OCR on the screenshot  
 ✅ Extracts text the vision model might have missed  
 
 ---
 
 ## 18. Whiteboard Annotations
 
-1. Ask a question where Clicky would point at multiple things, e.g.:
+1. Ask a question where Maclicky would point at multiple things, e.g.:
    *"show me where the menu bar and the address bar are"*
 
 ✅ Arrows or circles drawn on screen  
@@ -261,7 +261,7 @@ python main.py
 3. Tray → **Lesson Recording → Stop recording**  
 
 ✅ Toast: *"Lesson saved"*  
-4. Open `%LOCALAPPDATA%\Clicky\recordings\`  
+4. Open `~/Maclicky\recordings\`  
 ✅ MP4 file exists  
 ✅ `_transcript.md` file exists with all Q&A  
 
@@ -274,10 +274,10 @@ python main.py
 ✅ Toast: *"Recording your clicks + keys…"*  
 
 2. Do 5–10 actions: click around, type something, switch tabs
-3. Tray → **Workflow Capture → Stop + send to Clicky**
+3. Tray → **Workflow Capture → Stop + send to Maclicky**
 4. Ask *"what did I just do?"*
 
-✅ Clicky narrates your workflow step by step  
+✅ Maclicky narrates your workflow step by step  
 
 ---
 
@@ -285,28 +285,28 @@ python main.py
 
 1. Tray → **Tutor Mode → Privacy Guard: ON** (should be on by default)
 2. Open KeePass, Bitwarden, or any app with "login" / "password" in the title
-3. Ask Clicky anything
+3. Ask Maclicky anything
 
-✅ Clicky says it skipped the screenshot for privacy  
+✅ Maclicky says it skipped the screenshot for privacy  
 ✅ No screenshot taken of your password manager  
 
 ---
 
 ## 22. Per-App Memory
 
-1. Ask Clicky something in Chrome: *"what's on screen?"*
+1. Ask Maclicky something in Chrome: *"what's on screen?"*
 2. Switch to VS Code
 3. Ask: *"what were we just talking about?"*
 
-✅ Clicky has separate context — it won't mention the Chrome content  
+✅ Maclicky has separate context — it won't mention the Chrome content  
 ✅ Each app has its own conversation history  
 
 ---
 
 ## 23. Skills System
 
-1. Copy `skills/example_self_mode.py` to `~/.clicky/skills/my_skill.py`
-2. Restart Clicky
+1. Copy `skills/example_self_mode.py` to `~/.maclicky/skills/my_skill.py`
+2. Restart Maclicky
 3. Say the trigger phrase from the skill
 
 ✅ Skill fires its custom handler  
@@ -329,7 +329,7 @@ python main.py
 
 1. Tray → **Journal → Open journal folder**
 
-✅ Explorer opens `%LOCALAPPDATA%\Clicky\`  
+✅ Explorer opens `~/Maclicky\`  
 ✅ You can see `journal.db` and recordings  
 
 ---
@@ -342,13 +342,13 @@ Run this sequence to verify core features fast:
 1. python main.py                    → tray icon appears
 2. Hold hotkey → "what's on screen?" → answer spoken
 3. Esc during response               → stops immediately
-4. Say "Clicky, where is [element]"  → buddy flies to it
+4. Say "Maclicky, where is [element]"  → buddy flies to it
 5. Tray → Quiz Mode ON → "quiz me"   → quiz starts
 6. Tray → Quiz Mode OFF
 7. Drag a PDF onto panel             → toast confirms attach
 8. Ask "summarise the document"      → summary spoken
 9. Say "what did we cover today?"    → journal summary
-10. Tray → Quit Clicky               → clean exit
+10. Tray → Quit Maclicky               → clean exit
 ```
 
-All 10 steps passing = Clicky is fully functional.
+All 10 steps passing = Maclicky is fully functional.

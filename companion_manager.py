@@ -1,5 +1,5 @@
 """
-Central state machine for Clicky Windows.
+Central state machine for Maclicky.
 
 Orchestrates:
   hotkey / wake-word → ambient listener capture → STT → screen capture
@@ -61,7 +61,7 @@ def _build_system_prompt(
 
     # ── Quiz mode: dominant prompt that completely replaces normal behaviour ──
     if quiz_mode:
-        return f"""You are Clicky, an interactive QUIZ TUTOR. The user has
+        return f"""You are Maclicky, an interactive QUIZ TUTOR. The user has
 turned on Quiz Mode and wants to be tested, NOT explained to.
 
 {chr(10).join(ctx_lines)}
@@ -84,7 +84,7 @@ ABSOLUTE QUIZ RULES (override everything else):
 STYLE: short, friendly, never more than 2 sentences. End every turn with a
 question mark."""
 
-    return f"""You are Clicky, a VISUAL AI tutor running on Windows. You live
+    return f"""You are Maclicky, a VISUAL AI tutor running on macOS. You live
 next to the user's cursor. Your job is to *show*, not just tell.
 
 {chr(10).join(ctx_lines)}
@@ -189,7 +189,7 @@ ANY_TAG_RE   = re.compile(
 )
 ANY_PARTIAL_RE = re.compile(r'\[[A-Z]{0,9}(?::[^\]]*)?$')
 
-# Questions that ask Clicky to locate / click UI elements — triggers the
+# Questions that ask Maclicky to locate / click UI elements — triggers the
 # Computer Use element locator when Claude is the provider.
 POINT_TRIGGER_RE = re.compile(
     r"\b(where\s+(is|do|can)|how\s+do\s+i\s+(click|find|open|access|use)|"
@@ -257,7 +257,7 @@ class CompanionManager(QObject):
         self._collab: Optional[collab.CollabSession] = None
         self._workflow: Optional[workflow_capture.WorkflowCapture] = None
 
-        # Load user-created skills from skills/ + ~/.clicky/skills/
+        # Load user-created skills from skills/ + ~/Maclicky/skills/
         try:
             skills_pkg.load_all()
         except Exception:

@@ -10,7 +10,7 @@ Shown once on the first launch (or whenever the user clicks
 
 Everything is optional — the user can Skip at any step and use API keys
 instead. The wizard never blocks the main app from starting; the user can
-close it and Clicky's panel banner will keep nagging until Ollama is set up.
+close it and Maclicky's panel banner will keep nagging until Ollama is set up.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ from config import cfg
 # Marker file: the wizard skips itself if this exists.
 def _flag_path() -> Path:
     base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Clicky"
+    d = Path(base) / "Maclicky"
     d.mkdir(parents=True, exist_ok=True)
     return d / "setup_complete.flag"
 
@@ -60,7 +60,7 @@ class SetupWizard(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Clicky Setup")
+        self.setWindowTitle("Maclicky Setup")
         self.setModal(False)
         self.setMinimumSize(560, 380)
         self.setStyleSheet("""
@@ -101,12 +101,12 @@ class SetupWizard(QDialog):
         layout.setContentsMargins(32, 28, 32, 24)
         layout.setSpacing(14)
 
-        self.title = QLabel("Welcome to Clicky")
+        self.title = QLabel("Welcome to Maclicky")
         self.title.setObjectName("title")
         layout.addWidget(self.title)
 
         self.subtitle = QLabel(
-            "Clicky uses Ollama to run AI locally on your computer — for free, "
+            "Maclicky uses Ollama to run AI locally on your computer — for free, "
             "with no API keys required. Let's set it up in 2 minutes."
         )
         self.subtitle.setObjectName("subtitle")
@@ -187,7 +187,7 @@ class SetupWizard(QDialog):
             name = cfg.ollama_text_model
             self.title.setText("Step 2 of 3 — Download text model")
             self.subtitle.setText(
-                f"Pulling {name} (≈2 GB). This is what answers when you ask Clicky a question."
+                f"Pulling {name} (≈2 GB). This is what answers when you ask Maclicky a question."
             )
             self.action_btn.setText(f"Pull {name}")
             self.action_btn.setEnabled(True)
@@ -206,7 +206,7 @@ class SetupWizard(QDialog):
             name = cfg.ollama_vision_model
             self.title.setText("Step 3 of 3 — Download vision model (optional)")
             self.subtitle.setText(
-                f"Pulling {name} (≈3 GB). Needed only when Clicky reads your screen "
+                f"Pulling {name} (≈3 GB). Needed only when Maclicky reads your screen "
                 f"(Pixel-Perfect Pointing, screenshots). You can skip this and add it later."
             )
             self.action_btn.setText(f"Pull {name}")
@@ -225,10 +225,10 @@ class SetupWizard(QDialog):
         elif step == "done":
             self.title.setText("All set 🎉")
             self.subtitle.setText(
-                "Clicky is ready. Press Ctrl+Alt+Space anywhere on your computer, "
-                "or just say \"Clicky\" to start a conversation."
+                "Maclicky is ready. Press Cmd+Alt+Space anywhere on your computer, "
+                "or just say \"Maclicky\" to start a conversation."
             )
-            self.action_btn.setText("Start using Clicky")
+            self.action_btn.setText("Start using Maclicky")
             self.action_btn.setEnabled(True)
             self.skip_btn.hide()
             self.status.setText("")

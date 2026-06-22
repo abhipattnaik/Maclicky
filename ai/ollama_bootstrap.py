@@ -1,7 +1,7 @@
 """
 Ollama bootstrap utilities.
 
-Most users who hit "Clicky listens but won't answer" don't have Ollama
+Most users who hit "Maclicky listens but won't answer" don't have Ollama
 installed (or installed it without pulling a model). This module:
 
   • Detects whether Ollama is running     → is_ollama_running()
@@ -145,7 +145,7 @@ def pull_model(
 
 def _default_installer_path() -> Path:
     base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Clicky" / "downloads"
+    d = Path(base) / "Maclicky" / "downloads"
     d.mkdir(parents=True, exist_ok=True)
     filename = "Ollama-darwin.zip" if sys.platform == "darwin" else "OllamaSetup.exe"
     return d / filename
@@ -262,7 +262,7 @@ def _cli():
         return
 
     if cmd == "diag":
-        print("─── Clicky Ollama diagnostics ───")
+        print("─── Maclicky Ollama diagnostics ───")
         print(f"Configured host:          {cfg.ollama_host}")
         print(f"Configured text model:    {cfg.ollama_text_model}")
         print(f"Configured vision model:  {cfg.ollama_vision_model}")

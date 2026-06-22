@@ -17,6 +17,14 @@ from ui.design import (
 )
 from config import cfg
 
+_hotkey_parts = cfg.hotkey.split("+")
+hotkey_str = "+".join(
+    "Opt" if k == "alt" and __import__("sys").platform == "darwin" else
+    "Cmd" if k == "cmd" else
+    k.capitalize()
+    for k in _hotkey_parts
+)
+
 
 class AppState(Enum):
     IDLE      = auto()
@@ -26,7 +34,7 @@ class AppState(Enum):
 
 
 STATE_LABELS = {
-    AppState.IDLE:      "Say 'Clicky' or Ctrl+Alt+Space",
+    AppState.IDLE:      f"Say 'Maclicky' or {hotkey_str}",
     AppState.LISTENING: "Listening...",
     AppState.THINKING:  "Thinking...",
     AppState.SPEAKING:  "Speaking...",
@@ -185,7 +193,7 @@ class CompanionPanel(QWidget):
 
         # Header
         header = QHBoxLayout()
-        title = QLabel("Clicky")
+        title = QLabel("Maclicky")
         title.setObjectName("title")
         title.setFont(FONT_TITLE)
         header.addWidget(title)
@@ -245,7 +253,7 @@ class CompanionPanel(QWidget):
         root.addWidget(scroll, stretch=1)
 
         # Push-to-talk button
-        self._ptt_btn = QPushButton("Say 'Clicky' or hold Ctrl+Alt+Space")
+        self._ptt_btn = QPushButton(f"Say 'Maclicky' or hold {hotkey_str}")
         self._ptt_btn.setObjectName("hotkey_btn")
         self._ptt_btn.setFont(FONT_LABEL)
         self._ptt_btn.setFixedHeight(44)
@@ -363,7 +371,7 @@ class CompanionPanel(QWidget):
             f"2.  Enter code:\n\n"
             f"        {user_code}\n\n"
             "3.  Click Authorize in GitHub.\n\n"
-            "Clicky will sign in automatically once you authorize."
+            "Maclicky will sign in automatically once you authorize."
         )
         self._response_label.setText(self._response_text)
         self._status_label.setText("Waiting for Copilot authorization…")

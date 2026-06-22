@@ -1,7 +1,7 @@
 """
-Clicky's blue buddy cursor — faithful port of the original macOS overlay.
+Maclicky's blue buddy cursor — faithful port of the original macOS overlay.
 
-Matches clicky-main/leanring-buddy/OverlayWindow.swift:
+Matches maclicky-main/learning-buddy/OverlayWindow.swift:
   - Flat solid blue equilateral triangle (#3380FF), 16×16, rotated -35°
   - Sits at (+35, +25) relative to the real cursor
   - Soft blue drop shadow (radius ~8)
@@ -93,7 +93,7 @@ class CursorOverlay(QWidget):
         # When True, dwell never expires — manager releases after TTS finishes
         self._hold_dwell: bool = False
 
-        # Slow mode — doubles flight + dwell so Clicky feels more like a teacher
+        # Slow mode — doubles flight + dwell so Maclicky feels more like a teacher
         self._slow_mode: bool = False
 
         # Optional highlight ring around detected element (x, y, radius)
@@ -170,7 +170,7 @@ class CursorOverlay(QWidget):
     def set_point_hold(self, hold: bool):
         """Called by manager when TTS starts (True) / ends (False).
         While held, dwell never auto-expires — the buddy stays on the element
-        the entire time Clicky speaks."""
+        the entire time Maclicky speaks."""
         self._hold_dwell = hold
         if hold and self._flight_phase == _PHASE_DWELLING:
             self._dwell_until = float("inf")

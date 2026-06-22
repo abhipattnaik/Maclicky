@@ -3,7 +3,7 @@ Always-on ambient audio listener.
 Handles:
   - Continuous mic stream (single sounddevice input)
   - Energy-based VAD to detect speech segments
-  - Wake-word detection via faster-whisper tiny model (triggers on "clicky" / "hey clicky")
+  - Wake-word detection via faster-whisper tiny model (triggers on "maclicky" / "hey maclicky")
   - Push-to-talk buffering when hotkey is held
   - Streams RMS level to UI (cursor waveform + panel)
 """
@@ -33,12 +33,12 @@ SILENCE_BLOCKS_END = 20              # ~600ms of silence ends a segment
 MAX_SEGMENT_BLOCKS = 120             # ~3.6s max wake-word segment
 PRE_ROLL_BLOCKS    = 18              # ~540ms of pre-roll for the wake word
 
-# Wake phrases — whisper tiny often mis-transcribes "clicky" so we cover variants
+# Wake phrases — whisper tiny often mis-transcribes "maclicky" so we cover variants
 WAKE_WORDS = (
-    "clicky", "click e", "click he", "click me", "clickie", "clicki",
-    "cliki", "klicki", "klicky", "kilicky", "clickey", "clickity",
-    "hey clicky", "hi clicky", "hey click", "ok clicky", "yo clicky",
-    "hey clicki", "hey klicki", "hey clickie",
+    "maclicky", "maclick", "my clicky", "ma clicky", "mcclicky",
+    "mac clicky", "maclic", "maclickie", "maclicki", "macliky",
+    "hey maclicky", "hi maclicky", "hey maclick", "ok maclicky",
+    "hey mac clicky", "hey mcclicky", "yo maclicky"
 )
 
 
@@ -227,7 +227,7 @@ class AmbientListener:
                 condition_on_previous_text=False,
                 no_speech_threshold=0.45,
                 temperature=0.0,
-                initial_prompt="Clicky is a helpful AI assistant.",
+                initial_prompt="Maclicky is a helpful AI assistant.",
             )
             return " ".join(s.text for s in segments)
         finally:

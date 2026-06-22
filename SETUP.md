@@ -1,4 +1,4 @@
-# Clicky for Windows — Setup Guide
+# Maclicky — Setup Guide
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@
 ## Install
 
 ```bash
-cd clicky-windows
+cd Maclicky
 
 # Student version (free, no API keys needed)
 pip install -r requirements-student.txt
@@ -35,9 +35,9 @@ python main.py
 ```
 
 A floating panel appears in the bottom-right corner.
-The Clicky icon appears in your system tray.
+The Maclicky icon appears in your system tray.
 
-**Hold `Ctrl+Alt+Space`** to speak. Release to send.
+**Hold `Cmd+Alt+Space`** to speak. Release to send.
 
 ## Provider Priority (auto-detected)
 

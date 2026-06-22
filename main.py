@@ -1,5 +1,5 @@
 """
-Clicky for Windows — Entry Point.
+Maclicky for macOS — Entry Point.
 Boots Qt, spawns overlay+panel+tray, starts ambient mic listener, binds hotkey.
 """
 
@@ -39,7 +39,7 @@ def _copilot_login_flow(tray, panel, manager):
             f"GitHub Copilot Sign-In\n\n"
             f"1. Visit: {verification_uri}\n"
             f"2. Enter code:  {user_code}\n"
-            f"3. Click Authorize — Clicky will sign in automatically."
+            f"3. Click Authorize — Maclicky will sign in automatically."
         )
         # Show in panel (cross-thread safe via Qt signal)
         panel.show_copilot_code(user_code, verification_uri)
@@ -66,8 +66,8 @@ def main():
     )
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
-    app.setApplicationName("Clicky")
-    app.setApplicationDisplayName("Clicky - AI Companion")
+    app.setApplicationName("Maclicky")
+    app.setApplicationDisplayName("Maclicky - AI Companion")
 
     # ── Core components ───────────────────────────────────────────────────────
     manager = CompanionManager()
@@ -105,7 +105,7 @@ def main():
 
     # Errors
     manager.sig_error.connect(
-        lambda e: tray.show_notification("Clicky error", str(e))
+        lambda e: tray.show_notification("Maclicky error", str(e))
     )
 
     # Panel → Manager
@@ -115,7 +115,7 @@ def main():
         ok = manager.attach_document(path)
         tray.show_notification(
             "Document Attached" if ok else "Attach failed",
-            f"{path}\nAsk Clicky about it now." if ok else
+            f"{path}\nAsk Maclicky about it now." if ok else
             "Couldn't read that file."
         )
     panel.on_document_dropped.connect(_on_doc_dropped)
@@ -165,7 +165,7 @@ def main():
         if summary:
             tray.show_notification(
                 "Workflow Captured",
-                "Sent to Clicky as context. Ask: 'what did I just do?'"
+                "Sent to Maclicky as context. Ask: 'what did I just do?'"
             )
             # Stash as an attached doc so the next question sees it
             manager._attached_docs.append(("recorded_workflow.txt", summary))
@@ -186,7 +186,7 @@ def main():
     def _open_journal():
         import os, subprocess, sys
         base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-        path = os.path.join(base, "Clicky")
+        path = os.path.join(base, "Maclicky")
         if sys.platform == "darwin":
             subprocess.Popen(["open", path])
         elif sys.platform == "win32":
@@ -202,14 +202,14 @@ def main():
     def _attach_doc():
         from PyQt6.QtWidgets import QFileDialog
         path, _ = QFileDialog.getOpenFileName(
-            None, "Attach a document for Clicky",
+            None, "Attach a document for Maclicky",
             "", "Documents (*.pdf *.docx *.txt *.md *.csv)"
         )
         if path:
             ok = manager.attach_document(path)
             tray.show_notification(
                 "Document Attached",
-                f"{path}\nAsk Clicky about it now." if ok else
+                f"{path}\nAsk Maclicky about it now." if ok else
                 "Couldn't read that file."
             )
     tray.on_attach_doc.connect(_attach_doc)
@@ -218,7 +218,7 @@ def main():
         manager.set_active_provider(name)
         panel.refresh_for_provider(name)       # repopulate model dropdown + badge
         tray.rebuild_menu()                    # tick mark moves to new provider
-        tray.show_notification("Clicky", f"Switched to {name}")
+        tray.show_notification("Maclicky", f"Switched to {name}")
 
     tray.on_switch_provider.connect(_switch)
     tray.on_stop.connect(manager.stop)
@@ -273,13 +273,13 @@ def main():
         import datetime, json, platform, traceback
         from ai import ollama_bootstrap as ob
         base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-        out = Path(base) / "Clicky" / f"diagnostics-{datetime.datetime.now():%Y%m%d-%H%M%S}.txt"
+        out = Path(base) / "Maclicky" / f"diagnostics-{datetime.datetime.now():%Y%m%d-%H%M%S}.txt"
         try:
             providers_d = cfg.describe()
         except Exception:
             providers_d = {}
         report = []
-        report.append(f"Clicky diagnostics — {datetime.datetime.now().isoformat()}")
+        report.append(f"Maclicky diagnostics — {datetime.datetime.now().isoformat()}")
         report.append(f"Python: {sys.version.split()[0]}")
         report.append(f"Platform: {platform.platform()}")
         report.append(f"Active LLM: {providers_d.get('llm', '?')}")
@@ -338,8 +338,8 @@ def main():
 
     providers = cfg.describe()
     tray.show_notification(
-        "Clicky is running",
-        f"Say 'Clicky' or hold {cfg.hotkey}  |  LLM: {providers['llm']}",
+        "Maclicky is running",
+        f"Say 'Maclicky' or hold {cfg.hotkey}  |  LLM: {providers['llm']}",
     )
 
     # ── First-run setup wizard ────────────────────────────────────────────────
@@ -349,7 +349,7 @@ def main():
         from ui.setup_wizard import maybe_show_setup_wizard, SetupWizard
 
         # Force-show via env var (handy for testing).
-        if os.environ.get("CLICKY_FORCE_SETUP", "").strip() in ("1", "true", "yes"):
+        if (os.environ.get("MACLICKY_FORCE_SETUP") or os.environ.get("CLICKY_FORCE_SETUP") or "").strip() in ("1", "true", "yes"):
             wiz = SetupWizard()
             wiz.show()
             _setup_keepalive[0] = wiz

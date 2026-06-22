@@ -9,7 +9,7 @@ Auth flow (one-time, ~30 seconds):
     python -m ai.github_copilot_provider login
     → prints a 9-char user code + opens https://github.com/login/device
     → you paste the code, click "Authorize"
-    → token cached to %LOCALAPPDATA%\\Clicky\\github_token.json
+    → token cached to ~/Maclicky/github_token.json
 
 Chat flow (every call):
     GitHub token  → exchange for short-lived Copilot token (cached to ~25 min)
@@ -61,7 +61,7 @@ USER_AGENT     = "GitHubCopilotChat/0.23.1"
 
 def _data_dir() -> Path:
     base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Clicky"
+    d = Path(base) / "Maclicky"
     d.mkdir(parents=True, exist_ok=True)
     return d
 
@@ -82,7 +82,7 @@ def _login_log_path() -> Path:
 
 def _log_login(line: str) -> None:
     """Append a timestamped line to the login log so we can debug failures
-    after the fact (the user can grab this from %LOCALAPPDATA%\\Clicky\\)."""
+    after the fact (the user can grab this from ~/Maclicky/)."""
     try:
         from datetime import datetime
         with open(_login_log_path(), "a", encoding="utf-8") as f:
@@ -294,7 +294,7 @@ def _normalise_model(m: dict) -> dict:
 
 
 async def refresh_models_to_cache() -> list[dict]:
-    """Fetch live + write to %LOCALAPPDATA%\\Clicky\\copilot_models.json."""
+    """Fetch live + write to ~/Maclicky/copilot_models.json."""
     raw = await fetch_models_live()
     flat = [_normalise_model(m) for m in raw if m.get("id")]
     flat = [m for m in flat if m["type"] == "chat" and m["picker"]]
@@ -345,9 +345,9 @@ def free_model_ids() -> list[str]:
 
 
 def pick_default_free_model() -> str:
-    """Best free model for Clicky — vision-capable, multiplier 0."""
+    """Best free model for Maclicky — vision-capable, multiplier 0."""
     models = cached_models()
-    # Vision-capable AND free → ideal (Clicky sends screenshots)
+    # Vision-capable AND free → ideal (Maclicky sends screenshots)
     for m in models:
         if m["vision"] and m["multiplier"] == 0:
             return m["id"]

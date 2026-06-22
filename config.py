@@ -41,14 +41,23 @@ class Config:
     tavily_api_key: Optional[str] = field(default_factory=lambda: os.getenv("TAVILY_API_KEY") or None)
 
     # App
-    hotkey: str = field(default_factory=lambda: os.getenv("CLICKY_HOTKEY", "ctrl+alt+space"))
+    hotkey: str = field(default_factory=lambda: (
+        os.getenv("MACLICKY_HOTKEY") or
+        os.getenv("Maclicky_HOTKEY") or
+        os.getenv("CLICKY_HOTKEY") or
+        ("cmd+alt+space" if __import__("sys").platform == "darwin" else "ctrl+alt+space")
+    ))
 
     def llm_provider(self) -> str:
         """Returns the active LLM provider (runtime override > priority chain).
 
         Priority chain: Claude > OpenAI > GitHub Copilot > Gemini > Ollama.
         """
-        override = os.environ.get("CLICKY_ACTIVE_LLM", "").strip().lower()
+        override = (
+            os.environ.get("MACLICKY_ACTIVE_LLM") or
+            os.environ.get("CLICKY_ACTIVE_LLM") or
+            ""
+        ).strip().lower()
         if override in self.available_llm_providers():
             return override
         if self.anthropic_api_key:
@@ -85,11 +94,16 @@ class Config:
 
     def set_active_llm(self, name: str) -> None:
         """Runtime switch — next query uses this provider."""
+        os.environ["MACLICKY_ACTIVE_LLM"] = name.lower()
         os.environ["CLICKY_ACTIVE_LLM"] = name.lower()
 
     def stt_provider(self) -> str:
         # Allow explicit override via env (so users can force whisper_cpp etc.)
-        forced = os.getenv("CLICKY_STT", "").strip().lower()
+        forced = (
+            os.getenv("MACLICKY_STT") or
+            os.getenv("CLICKY_STT") or
+            ""
+        ).strip().lower()
         if forced in ("deepgram", "openai", "whisper_cpp", "faster_whisper"):
             return forced
         if self.deepgram_api_key:
@@ -133,22 +147,29 @@ class Config:
     def get_ollama_model(self, kind: str = "vision") -> str:
         """Return the active model for the given kind ("vision" | "text").
 
-        Reads runtime override from CLICKY_OLLAMA_VISION_MODEL /
-        CLICKY_OLLAMA_TEXT_MODEL first, then the dataclass field, then the
+        Reads runtime override from MACLICKY_OLLAMA_VISION_MODEL /
+        MACLICKY_OLLAMA_TEXT_MODEL first, then the dataclass field, then the
         legacy single-model knob.
         """
-        env_key = "CLICKY_OLLAMA_VISION_MODEL" if kind == "vision" else "CLICKY_OLLAMA_TEXT_MODEL"
-        runtime = os.environ.get(env_key, "").strip()
-        if runtime:
-            return runtime
+        env_keys = (
+            ("MACLICKY_OLLAMA_VISION_MODEL", "CLICKY_OLLAMA_VISION_MODEL")
+            if kind == "vision"
+            else ("MACLICKY_OLLAMA_TEXT_MODEL", "CLICKY_OLLAMA_TEXT_MODEL")
+        )
+        for k in env_keys:
+            runtime = os.environ.get(k, "").strip()
+            if runtime:
+                return runtime
         return self.ollama_vision_model if kind == "vision" else self.ollama_text_model
 
     def set_ollama_model(self, kind: str, name: str) -> None:
         """Runtime switch for vision/text Ollama model. Persists for the session."""
         if kind not in ("vision", "text"):
             return
-        env_key = "CLICKY_OLLAMA_VISION_MODEL" if kind == "vision" else "CLICKY_OLLAMA_TEXT_MODEL"
+        env_key = "MACLICKY_OLLAMA_VISION_MODEL" if kind == "vision" else "MACLICKY_OLLAMA_TEXT_MODEL"
+        legacy_key = "CLICKY_OLLAMA_VISION_MODEL" if kind == "vision" else "CLICKY_OLLAMA_TEXT_MODEL"
         os.environ[env_key] = (name or "").strip()
+        os.environ[legacy_key] = (name or "").strip()
         # Mirror onto the dataclass so describe() picks it up immediately
         if kind == "vision":
             self.ollama_vision_model = name

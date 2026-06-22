@@ -4,6 +4,14 @@ from PyQt6.QtCore import Qt, QSize, pyqtSignal, QObject
 
 from config import cfg
 
+_hotkey_parts = cfg.hotkey.split("+")
+hotkey_str = "+".join(
+    "Opt" if k == "alt" and __import__("sys").platform == "darwin" else
+    "Cmd" if k == "cmd" else
+    k.capitalize()
+    for k in _hotkey_parts
+)
+
 
 def _make_tray_icon(color: QColor) -> QIcon:
     """Generate a simple coloured circle as the tray icon.
@@ -66,7 +74,7 @@ class TrayManager(QObject):
         self._tray = QSystemTrayIcon()
         self._tray.setIcon(self._icons["idle"])
         self._tray.setToolTip(
-            f"Clicky - AI Companion\nHold {cfg.hotkey} to speak"
+            f"Maclicky - AI Companion\nHold {hotkey_str} to speak"
         )
         self._search_enabled = True
         self._wake_enabled = True
@@ -140,7 +148,7 @@ class TrayManager(QObject):
         self._search_action = search_action
 
         wake_action = menu.addAction(
-            "Wake word 'Clicky': ON" if self._wake_enabled else "Wake word 'Clicky': OFF"
+            "Wake word 'Maclicky': ON" if self._wake_enabled else "Wake word 'Maclicky': OFF"
         )
         wake_action.setCheckable(True)
         wake_action.setChecked(self._wake_enabled)
@@ -232,7 +240,7 @@ class TrayManager(QObject):
         wf_menu = menu.addMenu("Workflow Capture")
         wf_start = wf_menu.addAction("Start capturing my clicks")
         wf_start.triggered.connect(self.on_workflow_start)
-        wf_stop  = wf_menu.addAction("Stop + send to Clicky")
+        wf_stop  = wf_menu.addAction("Stop + send to Maclicky")
         wf_stop.triggered.connect(self.on_workflow_stop)
 
         # ── Live collaboration ──
@@ -253,7 +261,7 @@ class TrayManager(QObject):
 
         menu.addSeparator()
 
-        quit_action = menu.addAction("Quit Clicky")
+        quit_action = menu.addAction("Quit Maclicky")
         quit_action.triggered.connect(self.on_quit)
 
         self._tray.setContextMenu(menu)
@@ -350,7 +358,7 @@ class TrayManager(QObject):
     def _toggle_wake(self, checked: bool):
         self._wake_enabled = checked
         self._wake_action.setText(
-            "Wake word 'Clicky': ON" if checked else "Wake word 'Clicky': OFF"
+            "Wake word 'Maclicky': ON" if checked else "Wake word 'Maclicky': OFF"
         )
         self.on_toggle_wake_word.emit(checked)
 

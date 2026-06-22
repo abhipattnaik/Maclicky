@@ -8,7 +8,7 @@
 
 Maclicky is a little AI buddy that **lives next to your cursor**. You hold a hotkey, ask it something about your screen, and it talks back — pointing at buttons, walking you through steps, drawing arrows on your screen. Think of it as having a patient tutor sitting beside you while you learn anything: video editing, coding, a new app, whatever.
 
-No more Alt-Tab to ChatGPT. No more typing out descriptions of what's on your screen. Just hold **Ctrl + Alt + Space**, speak, and Maclicky handles the rest.
+No more Alt-Tab to ChatGPT. No more typing out descriptions of what's on your screen. Just hold **Cmd + Alt + Space**, speak, and Maclicky handles the rest.
 
 Works **100% offline** with Ollama, or plug in your Grok / OpenAI / Gemini / GitHub Copilot key for the full experience.
 
@@ -40,7 +40,7 @@ The blue triangle sits **35 px right / 25 px below** your real cursor. When you 
 ## Feature List
 
 ### 🎙️ Voice Activation
-- Hold **Ctrl + Alt + Space** to push-to-talk
+- Hold **Cmd + Alt + Space** to push-to-talk
 - Say **"Maclicky"** for hands-free wake word
 - Press **Esc** to stop any response or TTS mid-stream
 
@@ -115,7 +115,7 @@ Switch mid-session from the system tray — takes ~1 second, no restart.
 - Ask **"what did we cover this week?"** → weekly digest
 - **SM-2 spaced repetition** — Maclicky reminds you to review topics at optimal intervals (1 → 3 → 7 → 14 → 30 → 60 → 120 days)
 - Say **"quiz me on what I should review"** → flashcard session from your journal
-- Journal stored at `%LOCALAPPDATA%\Maclicky\journal.db`
+- Journal stored at `~/Maclicky\journal.db`
 
 ### 📄 Document Context (Drag & Drop)
 - Drag a **PDF, DOCX, TXT, MD, CSV, or code file** onto the Maclicky panel
@@ -155,7 +155,7 @@ Switch mid-session from the system tray — takes ~1 second, no restart.
 - Records screen at 8 fps as an MP4 alongside a Markdown transcript of all Q&A
 - Start: **Tray → Lesson Recording → Start recording**
 - Stop: tray menu → produces `lesson_YYYY-MM-DD_HH-MM.mp4` + `lesson_YYYY-MM-DD_HH-MM_transcript.md`
-- Saved to `%LOCALAPPDATA%\Maclicky\recordings\`
+- Saved to `~/Maclicky\recordings\`
 
 ### 🖊️ Whiteboard Annotations
 - Maclicky can draw directly on your screen as it explains:
@@ -216,8 +216,8 @@ Place skill files in `~/.Maclicky/skills/` — Maclicky auto-loads on startup.
 
 ### 1. Clone
 ```bash
-git clone https://github.com/Bitshank-2338/Maclicky-windows.git
-cd Maclicky-windows
+git clone https://github.com/abhipattnaik/Maclicky.git
+cd Maclicky
 ```
 
 ### 2. Install dependencies
@@ -249,7 +249,7 @@ OLLAMA_HOST=http://localhost:11434
 OLLAMA_MODEL=llama3.2-vision
 
 # ── Customise ─────────────────────────────────────────────
-Maclicky_HOTKEY=ctrl+alt+space
+Maclicky_HOTKEY=cmd+alt+space
 WHISPERCPP_MODEL=base.en
 ```
 
@@ -259,7 +259,7 @@ Tray → Model → Sign in to GitHub Copilot…
 → visit github.com/login/device → enter code shown in terminal
 ```
 
-Token cached at `%LOCALAPPDATA%\Maclicky\github_token.json`. Default model = `gpt-4o-mini` (free tier).
+Token cached at `~/Maclicky\github_token.json`. Default model = `gpt-4o-mini` (free tier).
 
 ### 5. Run
 ```bash
@@ -345,7 +345,7 @@ See [BUILD.md](BUILD.md) for full packaging instructions including Inno Setup in
 ### Keyboard
 | Key | Action |
 |---|---|
-| `Ctrl + Alt + Space` (hold) | Push-to-talk |
+| `Cmd + Alt + Space` (hold) | Push-to-talk |
 | `Esc` | Stop response / TTS immediately |
 
 ### Tray Menu
@@ -419,7 +419,7 @@ overlay.point_at(logical_x, logical_y)  ← correct position on any screen
 ## File Structure
 
 ```
-Maclicky-windows/
+Maclicky/
 ├── main.py                      # entry point — boots Qt, wires all signals
 ├── companion_manager.py         # async orchestrator + state machine
 ├── config.py                    # env loading, provider detection, priority chain
@@ -504,7 +504,7 @@ Maclicky-windows/
 | `OLLAMA_MODEL` | `llama3.2-vision` | Legacy single-model fallback |
 | `OLLAMA_VISION_MODEL` | *(empty)* | Ollama model for screen-aware tasks (pointing, describe screen) |
 | `OLLAMA_TEXT_MODEL` | *(empty)* | Ollama model for Code Mode + journal Q&A |
-| `Maclicky_HOTKEY` | `ctrl+alt+space` | Global push-to-talk combo |
+| `Maclicky_HOTKEY` | `cmd+alt+space` | Global push-to-talk combo |
 | `Maclicky_STT` | *(auto)* | Force STT: `deepgram`/`openai`/`whisper_cpp`/`faster_whisper` |
 | `Maclicky_ACTIVE_LLM` | *(auto)* | Force LLM: `Grok`/`openai`/`copilot`/`gemini`/`ollama` |
 | `WHISPER_MODEL` | `base` | Faster-Whisper model (`tiny`/`base`/`small`/`medium`) |
@@ -530,7 +530,7 @@ Maclicky-windows/
 
 **GitHub Copilot auth fails**
 → Re-run: Tray → Model → Sign in to GitHub Copilot…
-→ Check `%LOCALAPPDATA%\Maclicky\github_token.json` exists
+→ Check `~/Maclicky\github_token.json` exists
 
 **Esc doesn't stop audio**
 → Make sure `sounddevice` is installed (`pip install sounddevice`)
@@ -556,7 +556,7 @@ Maclicky is open to contributors from **anywhere in the world**. Whether you're 
 
 ### Ways to contribute
 
-- 🐛 **Bug reports** — open an [Issue](https://github.com/Bitshank-2338/Maclicky-windows/issues) with steps to reproduce
+- 🐛 **Bug reports** — open an [Issue](https://github.com/abhipattnaik/Maclicky/issues) with steps to reproduce
 - 💡 **Feature ideas** — open an Issue tagged `enhancement`
 - 🌍 **Translations** — add your language to `tutor_features/multilang.py`
 - 🔌 **New LLM / STT / TTS providers** — follow the pattern in `ai/base_provider.py`
@@ -567,8 +567,8 @@ Maclicky is open to contributors from **anywhere in the world**. Whether you're 
 
 ```bash
 # 1. Fork on GitHub, then clone your fork
-git clone https://github.com/YOUR_USERNAME/Maclicky-windows.git
-cd Maclicky-windows
+git clone https://github.com/YOUR_USERNAME/Maclicky.git
+cd Maclicky
 
 # 2. Create a branch
 git checkout -b feat/your-feature-name

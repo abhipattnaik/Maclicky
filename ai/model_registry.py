@@ -6,12 +6,9 @@ Each provider exposes a "list models" endpoint we hit on demand:
   • OpenAI:     GET /v1/models                    (key in Authorization)
   • Gemini:     GET /v1beta/models?key=...        (key in query)
 
-Cached per-provider to %LOCALAPPDATA%\\Clicky\\models_<provider>.json with a
+Cached per-provider to ~/Maclicky/models_<provider>.json with a
 30-day TTL — long enough that you don't refetch constantly, short enough
 that new model releases land within a month without manual refresh.
-
-GitHub Copilot has its own (separate) implementation in github_copilot_provider.py
-because Copilot's flow is more complex (token exchange + per-seat filtering).
 """
 
 from __future__ import annotations
@@ -32,7 +29,7 @@ CACHE_TTL_SECONDS = 30 * 24 * 60 * 60   # 30 days
 
 
 # Curated fallback lists — used when the live endpoint is unreachable AND
-# the on-disk cache is empty. Reasonable defaults so Clicky still works
+# the on-disk cache is empty. Reasonable defaults so Maclicky still works
 # offline / on first run before refresh completes.
 _FALLBACKS: dict[str, list[dict]] = {
     "claude": [
@@ -55,7 +52,7 @@ _FALLBACKS: dict[str, list[dict]] = {
 
 def _data_dir() -> Path:
     base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-    d = Path(base) / "Clicky"
+    d = Path(base) / "Maclicky"
     d.mkdir(parents=True, exist_ok=True)
     return d
 
